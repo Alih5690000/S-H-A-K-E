@@ -69,6 +69,7 @@ class Bullet:public Sprite{
     float dx,dy;
     Sprite* shooter;
     bool first=true;
+    Sprite* First;
     Bullet(float dirX, float dirY, std::vector<Sprite*>& s, Sprite* ss, SDL_FRect r):
         Sprite(s), dx(dirX), dy(dirY){
             if (ss) shooter=ss;
@@ -79,9 +80,10 @@ class Bullet:public Sprite{
         rect.y+=dy*dt;
 
         for (auto i:sprites){
-            if (SDL_HasIntersectionF(&i->rect, &rect)){
-                if (shooter && i!=shooter && !first)
+            if (SDL_HasIntersectionF(&i->rect, &rect) && i!=First){
+                if (i!=shooter && !first)
                     i->active=false;
+                if (first) First=i;
                 first=false;
             }
         }
